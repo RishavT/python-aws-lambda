@@ -1,10 +1,10 @@
 #python-aws-lambda
 
 To create a new python lambda project, run
-    $ create_lambda.sh <function_name>
+    `$ create_lambda.sh <function_name>`
 
 For example:
-    $ create_lambda.sh tempfunction
+    `$ create_lambda.sh tempfunction`
 
 This will create the following folder structure:
 
