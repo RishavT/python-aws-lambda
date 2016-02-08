@@ -15,6 +15,17 @@ if [ "$2" = 'new' ]
         mkdir $1
         virtualenv2 ./$1
         mkdir ./$1/app
+
+        #Create sample handler
+        echo '"""Handler for thelambda function.
+        This the file which will run when the API endpoint is hit."""
+
+        def handler(event, context):
+            """
+            Handler function. This function will run when the API is hit.
+            """
+            return event
+        ' > $1/app/handler.py
 fi
 cd $1
 echo $0
@@ -39,18 +50,5 @@ chmod +x build.sh
 # cp -r ./lib/python2.7/site-packages/* dist/
 # cd dist/
 # zip -r1v ../dist.zip ./*' > build.sh
-
-#Create sample handler
-cd app
-touch handler.py
-echo '"""Handler for thelambda function.
-This the file which will run when the API endpoint is hit."""
-
-def handler(event, context):
-    """
-    Handler function. This function will run when the API is hit.
-    """
-    return event
-' > handler.py
 
 echo 'Successfully created new lambda app $1'
