@@ -10,21 +10,35 @@
 #
 # Takes the name of the lambda app as parameter.
 
-mkdir $1
+if [ "$2" = 'new' ]
+    then
+        mkdir $1
+        virtualenv2 ./$1
+        mkdir ./$1/app
+fi
 cd $1
-virtualenv2 .
-mkdir app
-
-#Create building script
-touch build.sh
+echo $0
+pwd -P
+#Copy building script
+original_file=$(readlink $0)
+echo $original_file
+if [ "$original_file" = '' ]
+    then
+        original_file=$0
+fi
+echo $original_file
+cp $(dirname $original_file)/build.sh .
 chmod +x build.sh
-echo '#!/bin/bash
-rm -rf ./dist
-mkdir ./dist
-cp -r ./app/* dist/
-cp -r ./lib/python2.7/site-packages/* dist/
-cd dist/
-zip -r1v ../dist.zip ./*' > build.sh
+# touch build.sh
+# chmod +x build.sh
+# echo '#!/bin/bash
+# rm -rf ./dist
+# mkdir ./dist
+# find ./app -name "*.pyc" -exec rm -rf {} \;
+# cp -r ./app/* dist/
+# cp -r ./lib/python2.7/site-packages/* dist/
+# cd dist/
+# zip -r1v ../dist.zip ./*' > build.sh
 
 #Create sample handler
 cd app
