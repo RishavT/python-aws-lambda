@@ -20,7 +20,7 @@ To build, build.sh which will create a dist.zip which can then be uploaded.
 
 All packages installed via pip will be included in the dist.zip
 
-## TODO List:
+### TODO List:
 
 * Add git support - automatic pulling from a git repo while project creation, and possibly support for git hooks in the future.
 * Add `make` support.
