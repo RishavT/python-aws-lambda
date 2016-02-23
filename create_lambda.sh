@@ -10,45 +10,50 @@
 #
 # Takes the name of the lambda app as parameter.
 
+if [ -z "$1" -o "$1" = "--help" -o "$1" = "-h"]
+    then
+        echo "create_lambda.sh"
+        echo "To create a new lambda function called `foo` in $(pwd), run:"
+        echo "create_lambda.sh foo new"
+        echo "And a new directory (with required files for a demo lambda function) \
+will get created."
+        echo "\nTo update the build scripts of an existing lambda function, run: "
+        echo "create_lambda.sh foo"
+        exit 0
+fi
+
+# Get parent directory of this script
+original_file=$(readlink $0)
+echo 'lol'
+echo $original_file
+
+if [ "$original_file" = '' ]
+    then
+        original_file=$0
+fi
+
+SCRIPT_DIRECTORY=$(dirname $original_file)
+echo $SCRIPT_DIRECTORY
+
 if [ "$2" = 'new' ]
     then
         mkdir $1
         virtualenv2 ./$1
         mkdir ./$1/app
 
-        #Create sample handler
-        echo '"""Handler for thelambda function.
-        This the file which will run when the API endpoint is hit."""
-
-        def handler(event, context):
-            """
-            Handler function. This function will run when the API is hit.
-            """
-            return event
-        ' > $1/app/handler.py
+        # Copy sample handler function
+        cp $SCRIPT_DIRECTORY/handler.py $1/app/
 fi
-cd $1
+
 echo $0
 pwd -P
-#Copy building script
-original_file=$(readlink $0)
-echo $original_file
-if [ "$original_file" = '' ]
-    then
-        original_file=$0
-fi
-echo $original_file
-cp $(dirname $original_file)/build.sh .
-chmod +x build.sh
-# touch build.sh
-# chmod +x build.sh
-# echo '#!/bin/bash
-# rm -rf ./dist
-# mkdir ./dist
-# find ./app -name "*.pyc" -exec rm -rf {} \;
-# cp -r ./app/* dist/
-# cp -r ./lib/python2.7/site-packages/* dist/
-# cd dist/
-# zip -r1v ../dist.zip ./*' > build.sh
+# Copy building script
+cp $SCRIPT_DIRECTORY/build.sh $1
+chmod +x $1/build.sh
 
 echo 'Successfully created new lambda app $1'
+echo 'To build the zip for uploading, run $1/build.sh build'
+echo 'To upload the zip to your AWS web services, run $1/build.sh publish'
+echo '* The folder name ($1) should be the same as the lambda function name'
+echo '* And you have to provied `handler/handler` as the module to run in lambda.'
+echo '* Unless you change the file/function names.'
