@@ -10,7 +10,9 @@
 #
 # Takes the name of the lambda app as parameter.
 
-if [ -z "$1" -o "$1" = "--help" -o "$1" = "-h"]
+virtualenv_="/usr/bin/env python2 -m virtualenv"
+
+if [ -z "$1" -o "$1" = "--help" -o "$1" = "-h" ]
     then
         echo "create_lambda.sh"
         echo "To create a new lambda function called `foo` in $(pwd), run:"
@@ -38,7 +40,7 @@ echo $SCRIPT_DIRECTORY
 if [ "$2" = 'new' ]
     then
         mkdir $1
-        virtualenv2 ./$1
+        $virtualenv_ ./$1
         mkdir ./$1/app
 
         # Copy sample handler function
